@@ -7,6 +7,7 @@ import Loadable from 'component/Loadable';
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('pages/SamplePage')));
 const CodeReview = Loadable(lazy(() => import('pages/CodeReview')));
+const CodeExplanation = Loadable(lazy(() => import('pages/CodeExplanation')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -28,7 +29,7 @@ const MainRoutes = {
         },
         {
             path: '/code-explanation',
-            element: <SamplePage />
+            element: <CodeExplanation />
         },
         {
             path: '/code-completion',
