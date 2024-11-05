@@ -8,7 +8,7 @@ import Loadable from 'component/Loadable';
 const SamplePage = Loadable(lazy(() => import('pages/SamplePage')));
 const CodeReview = Loadable(lazy(() => import('pages/CodeReview')));
 const CodeExplanation = Loadable(lazy(() => import('pages/CodeExplanation')));
-
+const CodeTranslation = Loadable(lazy(() => import('pages/CodeTranslation')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -36,8 +36,8 @@ const MainRoutes = {
             element: <SamplePage />
         },
         {
-            path: '/code-refactoring',
-            element: <SamplePage />
+            path: '/code-translation',
+            element: <CodeTranslation />
         }
     ]
 };
