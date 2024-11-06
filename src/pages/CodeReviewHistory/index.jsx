@@ -1,4 +1,3 @@
-// React and hooks
 import React, { useState, useEffect } from 'react';
 
 // material-ui components
@@ -18,84 +17,87 @@ import { useNavigate } from 'react-router-dom';
 // project imports
 import MainCard from 'component/cards/MainCard';
 
-// Mock data for previewing the UI
-const mockReviewHistory = [
-    {
-        review_id: 1,
-        code_content: "function add(a, b) { return a + b }",
-        code_language: "JavaScript",
-        create_time: "2024-01-01T12:00:00Z",
-        update_time: "2024-01-02T12:00:00Z",
-    },
-    {
-        review_id: 2,
-        code_content: "const multiply = (x, y) => x * y",
-        code_language: "JavaScript",
-        create_time: "2024-01-03T12:00:00Z",
-        update_time: "2024-01-04T12:00:00Z",
-    },
-];
-
 const ReviewHistoryPage = () => {
     const [reviewHistory, setReviewHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Use mock data directly instead of fetching from the backend
-        setReviewHistory(mockReviewHistory);
-    }, []);
+        // Fetch review history data from backend
+        const fetchReviewHistory = async () => {
+            try {
+                const response = await fetch('/CodeReview/review/history');
 
-    const viewDetails = (reviewId) => {
-        alert("View details for Review ID: " + reviewId);
-    };
+                if (!response.ok) {
+                    throw new Error("Failed to fetch review history");
+                }
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    setReviewHistory(result.data || []);
+                } else {
+                    setReviewHistory([]);
+                    setError(result.message || "No history to display");
+                }
+            } catch (error) {
+                setError(error.message || "No history to display");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviewHistory();
+    }, []);
 
     return (
         <MainCard title="Review History">
-            {/* <Typography variant="body2" gutterBottom>
-                Here is the history of all code reviews.
-            </Typography> */}
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Typography variant="h6">History of Code Reviews</Typography>
                 <Button variant="contained" color="primary" onClick={() => navigate('/code-review')}>
                     Back
                 </Button>
             </Box>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Review ID</TableCell>
-                            <TableCell>Code Content</TableCell>
-                            <TableCell>Language</TableCell>
-                            <TableCell>Create Time</TableCell>
-                            <TableCell>Update Time</TableCell>
-                            <TableCell>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {reviewHistory.map((review) => (
-                            <TableRow key={review.review_id}>
-                                <TableCell>{review.review_id}</TableCell>
-                                <TableCell>{review.code_content}</TableCell>
-                                <TableCell>{review.code_language}</TableCell>
-                                <TableCell>{new Date(review.create_time).toLocaleString()}</TableCell>
-                                <TableCell>{new Date(review.update_time).toLocaleString()}</TableCell>
-                                <TableCell>
-                                    {/* <Button variant="outlined" onClick={() => viewDetails(review.review_id)}>
-                                        View
-                                    </Button> */}
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => navigate(`/review-history/${review.review_id}`)}
-                                    >
-                                        View
-                                    </Button>
-                                </TableCell>
+            {loading ? (
+                <Typography variant="body2" align="center">Loading...</Typography>
+            ) : error ? (
+                <Typography variant="body2" color="error" align="center">{error}</Typography>
+            ) : (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Review ID</TableCell>
+                                <TableCell>Code Content</TableCell>
+                                <TableCell>Language</TableCell>
+                                <TableCell>Create Time</TableCell>
+                                <TableCell>Update Time</TableCell>
+                                <TableCell>Action</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {reviewHistory.map((review) => (
+                                <TableRow key={review.review_id}>
+                                    <TableCell>{review.review_id}</TableCell>
+                                    <TableCell>{review.code_content}</TableCell>
+                                    <TableCell>{review.code_language}</TableCell>
+                                    <TableCell>{new Date(review.create_time).toLocaleString()}</TableCell>
+                                    <TableCell>{new Date(review.update_time).toLocaleString()}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => navigate(`/review-history/${review.review_id}`)}
+                                        >
+                                            View
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
         </MainCard>
     );
 };

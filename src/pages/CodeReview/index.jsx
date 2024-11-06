@@ -173,7 +173,6 @@ const rollbackChange = (index) => {
       >
         View History
       </Button>
-
     </Box>
   );
 };
