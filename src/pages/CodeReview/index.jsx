@@ -72,23 +72,26 @@ const CodeReview = () => {
     }
   };
 
-  const applyChange = (index) => {
-    const suggestion = suggestions[index];
-    const modifiedCode = code.replace(suggestion.change.original, suggestion.change.modified);
+const applyChange = (index) => {
+  const suggestion = suggestions[index];
+  const modifiedCode = code.replace(suggestion.change.original, suggestion.change.modified);
 
-    setAppliedSuggestions([...appliedSuggestions, suggestion]);
-    setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: true } : s)));
-    setCode(modifiedCode);
-  };
+  setAppliedSuggestions([...appliedSuggestions, { ...suggestion, index }]);
+  setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: true } : s)));
+  setCode(modifiedCode);
+};
 
-  const rollbackChange = (index) => {
-    const suggestion = appliedSuggestions[index];
-    const rolledBackCode = code.replace(suggestion.change.modified, suggestion.change.original);
+const rollbackChange = (index) => {
+  // Find the suggestion by its index in appliedSuggestions
+  const suggestion = appliedSuggestions.find((s) => s.index === index);
+  if (!suggestion) return;
 
-    setAppliedSuggestions(appliedSuggestions.filter((_, i) => i !== index));
-    setSuggestions(suggestions.map((s) => (s === suggestion ? { ...s, applied: false } : s)));
-    setCode(rolledBackCode);
-  };
+  const rolledBackCode = code.replace(suggestion.change.modified, suggestion.change.original);
+
+  setAppliedSuggestions(appliedSuggestions.filter((s) => s.index !== index));
+  setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: false } : s)));
+  setCode(rolledBackCode);
+};
 
   return (
     <Box sx={{ p: 2 }}>
@@ -170,10 +173,12 @@ const CodeReview = () => {
       >
         View History
       </Button>
-      
+
     </Box>
   );
 };
 
 export default CodeReview;
+
+
 
