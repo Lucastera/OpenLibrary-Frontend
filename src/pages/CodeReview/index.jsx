@@ -3,6 +3,7 @@ import { Typography, Button, Box, Paper, Grid, CircularProgress } from '@mui/mat
 import { styled } from '@mui/system';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
+import { useNavigate } from 'react-router-dom';
 
 const CodeContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -21,6 +22,8 @@ const CodeReview = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [appliedSuggestions, setAppliedSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   // Set up CodeMirror with Python language support
   const { setContainer } = useCodeMirror({
@@ -156,6 +159,18 @@ const CodeReview = () => {
       >
         Submit
       </Button>
+
+
+      {/* View History Button */}
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => navigate('/review-history')}
+        sx={{ mt: 2 }}
+      >
+        View History
+      </Button>
+      
     </Box>
   );
 };
