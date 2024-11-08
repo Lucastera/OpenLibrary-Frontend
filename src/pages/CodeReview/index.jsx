@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Button, Box, Paper, Grid, CircularProgress } from '@mui/material';
 import { styled } from '@mui/system';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { useNavigate } from 'react-router-dom';
+import { getCodeReviewHistory } from '../../api/index';
 
 const CodeContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginBottom: theme.spacing(2),
-  minHeight: '300px',
+  minHeight: '300px'
 }));
 
 const ReportContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
-  minHeight: '300px',
+  minHeight: '300px'
 }));
 
 const CodeReview = () => {
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await getCodeReviewHistory({
+        Page: 1,
+        Size: 10
+      });
+      console.log(res);
+    }
+    loadData()
+  }, []);
   const [code, setCode] = useState('');
   const [report, setReport] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -29,7 +40,7 @@ const CodeReview = () => {
   const { setContainer } = useCodeMirror({
     value: code,
     extensions: [python()],
-    onChange: (value) => setCode(value),
+    onChange: (value) => setCode(value)
   });
 
   const handleFileUpload = (event) => {
@@ -48,14 +59,14 @@ const CodeReview = () => {
     setReport('');
     setSuggestions([]);
     setAppliedSuggestions([]);
-    
+
     try {
       const response = await fetch('/api/analyze-code', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code })
       });
 
       if (response.ok) {
@@ -72,26 +83,26 @@ const CodeReview = () => {
     }
   };
 
-const applyChange = (index) => {
-  const suggestion = suggestions[index];
-  const modifiedCode = code.replace(suggestion.change.original, suggestion.change.modified);
+  const applyChange = (index) => {
+    const suggestion = suggestions[index];
+    const modifiedCode = code.replace(suggestion.change.original, suggestion.change.modified);
 
-  setAppliedSuggestions([...appliedSuggestions, { ...suggestion, index }]);
-  setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: true } : s)));
-  setCode(modifiedCode);
-};
+    setAppliedSuggestions([...appliedSuggestions, { ...suggestion, index }]);
+    setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: true } : s)));
+    setCode(modifiedCode);
+  };
 
-const rollbackChange = (index) => {
-  // Find the suggestion by its index in appliedSuggestions
-  const suggestion = appliedSuggestions.find((s) => s.index === index);
-  if (!suggestion) return;
+  const rollbackChange = (index) => {
+    // Find the suggestion by its index in appliedSuggestions
+    const suggestion = appliedSuggestions.find((s) => s.index === index);
+    if (!suggestion) return;
 
-  const rolledBackCode = code.replace(suggestion.change.modified, suggestion.change.original);
+    const rolledBackCode = code.replace(suggestion.change.modified, suggestion.change.original);
 
-  setAppliedSuggestions(appliedSuggestions.filter((s) => s.index !== index));
-  setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: false } : s)));
-  setCode(rolledBackCode);
-};
+    setAppliedSuggestions(appliedSuggestions.filter((s) => s.index !== index));
+    setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: false } : s)));
+    setCode(rolledBackCode);
+  };
 
   return (
     <Box sx={{ p: 2 }}>
@@ -117,32 +128,32 @@ const rollbackChange = (index) => {
             {loading ? (
               <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
                 <CircularProgress />
-                <Typography variant="body2" sx={{ ml: 2 }}>Loading suggestions...</Typography>
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  Loading suggestions...
+                </Typography>
               </Box>
             ) : (
               <>
-                <Typography variant="body2" sx={{ mt: 2 }}>{report}</Typography>
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  {report}
+                </Typography>
                 {suggestions.map((suggestion, index) => (
                   <Paper key={index} sx={{ p: 2, mt: 2, backgroundColor: suggestion.applied ? '#d1e7dd' : '#f5f5f5' }}>
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{suggestion.reason}</Typography>
-                    <Typography variant="body2"><strong>Original:</strong> {suggestion.change.original}</Typography>
-                    <Typography variant="body2"><strong>Modified:</strong> {suggestion.change.modified}</Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {suggestion.reason}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Original:</strong> {suggestion.change.original}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Modified:</strong> {suggestion.change.modified}
+                    </Typography>
                     {suggestion.applied ? (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => rollbackChange(index)}
-                        sx={{ mt: 1 }}
-                      >
+                      <Button variant="outlined" color="secondary" onClick={() => rollbackChange(index)} sx={{ mt: 1 }}>
                         Rollback
                       </Button>
                     ) : (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => applyChange(index)}
-                        sx={{ mt: 1 }}
-                      >
+                      <Button variant="outlined" color="primary" onClick={() => applyChange(index)} sx={{ mt: 1 }}>
                         Apply
                       </Button>
                     )}
@@ -153,24 +164,12 @@ const rollbackChange = (index) => {
           </ReportContainer>
         </Grid>
       </Grid>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        sx={{ mt: 2 }}
-        disabled={loading}
-      >
+      <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }} disabled={loading}>
         Submit
       </Button>
 
-
       {/* View History Button */}
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => navigate('/review-history')}
-        sx={{ mt: 2 }}
-      >
+      <Button variant="contained" color="secondary" onClick={() => navigate('/review-history')} sx={{ mt: 2 }}>
         View History
       </Button>
     </Box>
@@ -178,6 +177,3 @@ const rollbackChange = (index) => {
 };
 
 export default CodeReview;
-
-
-
