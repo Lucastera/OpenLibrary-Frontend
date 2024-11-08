@@ -1,3 +1,9 @@
-// code of network related
-// file name can be your part name
-// this fill is like "export * from 'api1.js'"  to export exery api
+import request from './request';
+
+export const getCodeReviewHistory = (params) => {
+    return request({
+        url: '/review/history',
+        method: 'get',
+        params
+    });
+};
