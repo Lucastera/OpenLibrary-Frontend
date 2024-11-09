@@ -25,8 +25,34 @@ const CodeExplanation = () => {
   const handleUpload = (event) => {
     event.preventDefault();
     if (file) {
-      // Simulate file upload
-      setUploadedFiles([...uploadedFiles, file.name]);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContent = e.target.result;
+        const fileName = file.name;
+
+        const string1 = fileName;
+        const string2 = fileContent;
+
+        // Send string1 and string2 to the backend
+        fetch('YOUR_SERVER_ENDPOINT', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ fileName: string1, fileContent: string2 }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+
+        setUploadedFiles([...uploadedFiles, fileName]);
+      };
+
+      reader.readAsText(file);
       setFile(null);
     }
   };
@@ -124,7 +150,7 @@ const CodeExplanation = () => {
                 {fileName}
               </Typography>
               <Button variant="outlined" onClick={() => handleSelectFile(fileName)}>
-                Select
+                Select This File
               </Button>
             </Box>
           ))}
