@@ -7,3 +7,12 @@ export const getCodeReviewHistory = (params) => {
         params
     });
 };
+
+
+export const getCodeReview = (params) => {
+    return request({
+        url: '/review',
+        method: 'get',
+        params
+    });
+};

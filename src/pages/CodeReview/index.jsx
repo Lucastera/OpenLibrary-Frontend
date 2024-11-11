@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { useNavigate } from 'react-router-dom';
-import { getCodeReviewHistory } from '../../api/index';
+import { getCodeReview } from '../../api/index';
 
 const CodeContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -20,7 +20,7 @@ const ReportContainer = styled(Paper)(({ theme }) => ({
 const CodeReview = () => {
   useEffect(() => {
     const loadData = async () => {
-      const res = await getCodeReviewHistory({
+      const res = await getCodeReview({
         Page: 1,
         Size: 10
       });

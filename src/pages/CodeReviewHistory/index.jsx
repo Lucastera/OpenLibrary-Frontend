@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { getCodeReviewHistory } from '../../api/index';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -18,38 +19,22 @@ import { useNavigate } from 'react-router-dom';
 import MainCard from 'component/cards/MainCard';
 
 const ReviewHistoryPage = () => {
+    useEffect(() => {
+        const loadData = async () => {
+        const res = await getCodeReviewHistory({
+            Page: 1,
+            Size: 10
+        });
+        console.log(res);
+        }
+        loadData()
+    }, []);
     const [reviewHistory, setReviewHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // Fetch review history data from backend
-        const fetchReviewHistory = async () => {
-            try {
-                const response = await fetch('/CodeReview/review/history');
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch review history");
-                }
-
-                const result = await response.json();
-
-                if (result.status === "success") {
-                    setReviewHistory(result.data || []);
-                } else {
-                    setReviewHistory([]);
-                    setError(result.message || "No history to display");
-                }
-            } catch (error) {
-                setError(error.message || "No history to display");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchReviewHistory();
-    }, []);
+    
 
     return (
         <MainCard title="Review History">
