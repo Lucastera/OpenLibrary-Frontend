@@ -164,14 +164,15 @@ const CodeReview = () => {
           </ReportContainer>
         </Grid>
       </Grid>
-      <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }} disabled={loading}>
+      <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2, mr: 45 }} disabled={loading}>
         Submit
       </Button>
-
+      
       {/* View History Button */}
       <Button variant="contained" color="secondary" onClick={() => navigate('/review-history')} sx={{ mt: 2 }}>
         View History
       </Button>
+
     </Box>
   );
 };
