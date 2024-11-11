@@ -10,6 +10,8 @@ const CodeReview = Loadable(lazy(() => import('pages/CodeReview')));
 const CodeExplanation = Loadable(lazy(() => import('pages/CodeExplanation')));
 const ViewReviewHistory = Loadable(lazy(() => import('pages/CodeReviewHistory')));
 const ViewDetailHistory = Loadable(lazy(() => import('pages/ReviewDetailHistory')));
+const CodeTranslation = Loadable(lazy(() => import('pages/CodeTranslation')));
+
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -48,6 +50,10 @@ const MainRoutes = {
         {
             path: '/review-history/:reviewId',
             element: <ViewDetailHistory />
+        },
+        {
+            path: '/code-translation',
+            element: <CodeTranslation />
         }
     ]
 };
