@@ -48,6 +48,14 @@ const Menu = [
                 url: '/code-refactoring',  // Updated URL
                 icon: icons.IconCode,
                 breadcrumbs: false
+            },
+            {
+                id: 'code-translation',
+                title: 'Code Translation',
+                type: 'item',
+                url: '/code-translation',  // Updated URL
+                icon: icons.IconCode,
+                breadcrumbs: false
             }
         ]
     }
