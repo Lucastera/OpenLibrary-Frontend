@@ -20,21 +20,28 @@ import MainCard from 'component/cards/MainCard';
 
 const ReviewHistoryPage = () => {
     useEffect(() => {
-        const loadData = async () => {
-        const res = await getCodeReviewHistory({
-            Page: 1,
-            Size: 10
-        });
-        console.log(res);
+        try {
+            setLoading(true)
+            const loadData = async () => {
+                const res = await getCodeReviewHistory({
+                    Page: 1,
+                    Size: 10
+                });
+                setReviewHistory(res.history)
+            }
+            loadData()
+            setLoading(false)
+        } catch (e) {
+            setError(e)
         }
-        loadData()
+
     }, []);
     const [reviewHistory, setReviewHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    
+
 
     return (
         <MainCard title="Review History">

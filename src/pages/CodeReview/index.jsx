@@ -69,12 +69,11 @@ const CodeReview = () => {
       //   },
       //   body: JSON.stringify({ code })
       // });
-
+      console.log(code)
       const response = await submitCodeReview({
-        // fullcode: code
-        fullcode
+        fullCode: code
       });
-      console.log(response);
+      // console.log(response);
 
         const data = await response.json();
         setReport(`Report generated for the provided code: ${code.substring(0, 100)}...`);
@@ -83,6 +82,7 @@ const CodeReview = () => {
         setReport('Error: Unable to process code. Please try again later.');
       
     } catch (error) {
+      console.log(error)
       setReport('Error: Failed to connect to the server.');
     } finally {
       setLoading(false);
