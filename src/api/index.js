@@ -8,11 +8,20 @@ export const getCodeReviewHistory = (params) => {
     });
 };
 
-
-export const getCodeReview = (params) => {
+export const submitCodeReview = (data) => {
     return request({
-        url: '/review',
-        method: 'get',
-        params
+        url: '/review/submit',
+        method: 'post',
+        params,
+        data
     });
 };
+
+export const getReviewDetailHistory = (reviewId) => {
+    return request({
+      url: `/review/detail`, //???? review/detail
+      method: 'get',
+      data
+    });
+  };
+

@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { getReviewDetailHistory } from '../../api/index';
 
 const CodeContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -36,7 +37,10 @@ const ViewDetailHistory = () => {
       setError(null);
       try {
         // Send a request to fetch the review details based on reviewId
-        const response = await fetch(`/CodeReview/review/history/${reviewId}`);
+        // const response = await fetch(`/CodeReview/review/history/${reviewId}`);
+        const response = await getReviewDetailHistory(reviewId);
+
+
         const result = await response.json();
 
         if (response.ok && result.status === "success") {
@@ -109,7 +113,7 @@ const ViewDetailHistory = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/review-history')}
+        onClick={() => navigate('/review/history')}
         sx={{ mt: 2 }}
       >
         Return to Review History

@@ -4,7 +4,8 @@ import { styled } from '@mui/system';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { useNavigate } from 'react-router-dom';
-import { getCodeReview } from '../../api/index';
+// import { getCodeReview } from '../../api/index';
+import { submitCodeReview } from '../../api/index';
 
 const CodeContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -18,16 +19,16 @@ const ReportContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const CodeReview = () => {
-  useEffect(() => {
-    const loadData = async () => {
-      const res = await getCodeReview({
-        Page: 1,
-        Size: 10
-      });
-      console.log(res);
-    }
-    loadData()
-  }, []);
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     const res = await getCodeReview({
+  //       Page: 1,
+  //       Size: 10
+  //     });
+  //     console.log(res);
+  //   }
+  //   loadData()
+  // }, []);
   const [code, setCode] = useState('');
   const [report, setReport] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -61,21 +62,26 @@ const CodeReview = () => {
     setAppliedSuggestions([]);
 
     try {
-      const response = await fetch('/api/analyze-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ code })
-      });
+      // const response = await fetch('/api/analyze-code', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ code })
+      // });
 
-      if (response.ok) {
+      const response = await submitCodeReview({
+        // fullcode: code
+        fullcode
+      });
+      console.log(response);
+
         const data = await response.json();
         setReport(`Report generated for the provided code: ${code.substring(0, 100)}...`);
         setSuggestions(data.suggestions || []);
-      } else {
+
         setReport('Error: Unable to process code. Please try again later.');
-      }
+      
     } catch (error) {
       setReport('Error: Failed to connect to the server.');
     } finally {
@@ -169,7 +175,7 @@ const CodeReview = () => {
       </Button>
       
       {/* View History Button */}
-      <Button variant="contained" color="secondary" onClick={() => navigate('/review-history')} sx={{ mt: 2 }}>
+      <Button variant="contained" color="secondary" onClick={() => navigate('/review/history')} sx={{ mt: 2 }}>
         View History
       </Button>
 
