@@ -12,19 +12,8 @@ const request = axios.create({
 // Request interceptor
 request.interceptors.request.use(
   (config) => {
-    // If token authorization is enabled
-    if (serverConfig.useTokenAuthorization) {
-      config.headers['Authorization'] = localStorage.getItem('token') || ''; // Attach token to headers
-    }
-    // Set request headers
     if (!config.headers['content-type']) {
-      // If content-type is not set
-      if (config.method === 'post') {
-        config.headers['content-type'] = 'application/x-www-form-urlencoded'; // For POST requests
-        config.data = qs.stringify(config.data); // Serialize form data
-      } else {
-        config.headers['content-type'] = 'application/json'; // Default type
-      }
+      config.headers['content-type'] = 'application/json'; // Default type
     }
     console.log('Request configuration', config);
     return config;
