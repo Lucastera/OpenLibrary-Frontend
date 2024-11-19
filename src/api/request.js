@@ -1,5 +1,4 @@
 import axios from 'axios';
-import qs from 'qs';
 import { RET, errorMap, serverConfig } from './config';
 
 // Create axios instance
