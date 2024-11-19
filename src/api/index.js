@@ -16,11 +16,10 @@ export const submitCodeReview = (data) => {
     });
 };
 
-export const getReviewDetailHistory = (reviewId) => {
+export const getReviewDetailHistory = (historyID) => {
     return request({
-      url: `/review/detail`, //???? review/detail
-      method: 'get',
-      data
+      url: `/review/detail?history_id=${historyID}`, // Passing reviewId as a query parameter
+      method: 'get'
     });
   };
 

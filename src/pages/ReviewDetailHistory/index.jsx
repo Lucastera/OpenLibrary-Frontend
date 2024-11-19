@@ -19,7 +19,8 @@ const ReportContainer = styled(Paper)(({ theme }) => ({
 
 const ViewDetailHistory = () => {
   const navigate = useNavigate();
-  const { reviewId } = useParams(); // Extract reviewId from URL parameters
+  // const { reviewId } = useParams(); // Extract reviewId from URL parameters
+  const { historyID } = useParams();
 
   const [reviewDetails, setReviewDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,27 +37,28 @@ const ViewDetailHistory = () => {
       setLoading(true);
       setError(null);
       try {
-        // Send a request to fetch the review details based on reviewId
-        // const response = await fetch(`/CodeReview/review/history/${reviewId}`);
-        const response = await getReviewDetailHistory(reviewId);
-
-
-        const result = await response.json();
-
-        if (response.ok && result.status === "success") {
-          setReviewDetails(result.data);
+        const response = await getReviewDetailHistory(historyID);
+  
+        // Log the response to inspect the structure
+        console.log('Full Response:', response);
+  
+        // Directly access fields from the response object
+        if (response && response.code_content && response.history_id) {
+          setReviewDetails(response); // Use the response directly
         } else {
-          throw new Error(result.message || "Failed to load review details");
+          throw new Error('Invalid response format: no data fields found');
         }
       } catch (error) {
-        setError(error.message || "An error occurred while loading review details");
+        console.error('Error fetching review details:', error);
+        setError(error.message || 'An error occurred while loading review details');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchReviewDetails();
-  }, [reviewId]);
+  }, [historyID]);
+  
 
   return (
     <Box sx={{ p: 2 }}>
@@ -64,7 +66,8 @@ const ViewDetailHistory = () => {
         <Grid item xs={6}>
           <CodeContainer>
             <Typography variant="h6">
-              {reviewDetails ? `Code Review Details for ID: ${reviewDetails.review_id}` : "Loading..."}
+              {/* {reviewDetails ? `Code Review Details for ID: ${reviewDetails.review_id}` : "Loading..."} */}
+              {reviewDetails ? `Code Review Details for ID: ${reviewDetails.history_id}` : "Loading..."}
             </Typography>
             {loading ? (
               <CircularProgress sx={{ mt: 2 }} />
@@ -97,13 +100,13 @@ const ViewDetailHistory = () => {
             ) : error ? (
               <Typography variant="body2" color="error" align="center">{error}</Typography>
             ) : (
-              reviewDetails.codeSnippets.map((snippet, index) => (
+              reviewDetails.issues.map((issue, index) => (
                 <Paper key={index} sx={{ p: 2, mt: 2, backgroundColor: '#f5f5f5' }}>
                   <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Issue:</Typography>
-                  <Typography variant="body2" sx={{ mb: 1 }}>{snippet.issueReason}</Typography>
-                  <Typography variant="body2"><strong>Original Code:</strong> {snippet.originalCode}</Typography>
-                  <Typography variant="body2"><strong>Suggestion:</strong> {snippet.suggestion}</Typography>
-                  <Typography variant="body2"><strong>Fixed Code:</strong> {snippet.fixedCode}</Typography>
+                  <Typography variant="body2" sx={{ mb: 1 }}>{issue.issueReason}</Typography>
+                  <Typography variant="body2"><strong>Original Code:</strong> {issue.originalCode}</Typography>
+                  <Typography variant="body2"><strong>Suggestion:</strong> {issue.suggestion}</Typography>
+                  <Typography variant="body2"><strong>Fixed Code:</strong> {issue.fixedCode}</Typography>
                 </Paper>
               ))
             )}

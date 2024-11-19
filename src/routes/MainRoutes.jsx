@@ -48,9 +48,7 @@ const MainRoutes = {
             element: <ViewReviewHistory />
         },
         {
-            // path: '/review-history/:reviewId',
-            // element: <ViewDetailHistory />
-            path: '/review/detail',
+            path: '/review/detail/:historyID',
             element: <ViewDetailHistory />
         },
         {

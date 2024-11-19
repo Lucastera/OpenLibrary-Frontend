@@ -41,7 +41,16 @@ const ReviewHistoryPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    // Max length for code content preview
+    const MAX_CODE_LENGTH = 100; // Adjust this value to your needs
 
+    // Function to truncate long code content
+    const truncateCodeContent = (content, maxLength) => {
+        if (content.length > maxLength) {
+            return content.substring(0, maxLength) + '...';
+        }
+        return content;
+    };
 
     return (
         <MainCard title="Review History">
@@ -70,16 +79,29 @@ const ReviewHistoryPage = () => {
                         </TableHead>
                         <TableBody>
                             {reviewHistory.map((review) => (
-                                <TableRow key={review.review_id}>
-                                    <TableCell>{review.review_id}</TableCell>
-                                    <TableCell>{review.code_content}</TableCell>
+                                // <TableRow key={review.review_id}>
+                                <TableRow key={review.history_id}>
+                                    {/* <TableCell>{review.review_id}</TableCell> */}
+                                    <TableCell>{review.history_id}</TableCell>
+                                    {/* <TableCell>{review.code_content}</TableCell> */}
+                                    <TableCell>
+                                        {truncateCodeContent(review.code_content, MAX_CODE_LENGTH)}
+                                    </TableCell>
                                     <TableCell>{review.code_language}</TableCell>
                                     <TableCell>{new Date(review.create_time).toLocaleString()}</TableCell>
                                     <TableCell>{new Date(review.update_time).toLocaleString()}</TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                         <Button
                                             variant="outlined"
                                             onClick={() => navigate(`/review-history/${review.review_id}`)}
+                                        >
+                                            View
+                                        </Button>
+                                    </TableCell> */}
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => navigate(`/review/detail/${review.history_id}`)}
                                         >
                                             View
                                         </Button>
