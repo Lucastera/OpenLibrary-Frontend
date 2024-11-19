@@ -11,6 +11,7 @@ const CodeExplanation = Loadable(lazy(() => import('pages/CodeExplanation')));
 const ViewReviewHistory = Loadable(lazy(() => import('pages/CodeReviewHistory')));
 const ViewDetailHistory = Loadable(lazy(() => import('pages/ReviewDetailHistory')));
 const CodeTranslation = Loadable(lazy(() => import('pages/CodeTranslation')));
+const CodeReview = Loadable(lazy(() => import('pages/CodeCompletion')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -37,7 +38,7 @@ const MainRoutes = {
         },
         {
             path: '/code-completion',
-            element: <SamplePage />
+            element: <CodeCompletion />
         },
         {
             path: '/code-refactoring',
