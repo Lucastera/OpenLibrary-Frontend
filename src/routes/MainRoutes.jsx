@@ -44,11 +44,11 @@ const MainRoutes = {
             element: <SamplePage />
         },
         {
-            path: '/review-history',
+            path: '/review/history',
             element: <ViewReviewHistory />
         },
         {
-            path: '/review-history/:reviewId',
+            path: '/review/detail/:historyID',
             element: <ViewDetailHistory />
         },
         {
