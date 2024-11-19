@@ -11,7 +11,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { CssBaseline, styled, useTheme } from '@mui/material';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Customization from '../Customization';
 import { SET_MENU } from 'store/actions';
 import { drawerWidth } from 'store/constant';
 
@@ -87,7 +86,6 @@ const MainLayout = () => {
                 {/* breadcrumb */}
                 <Outlet />
             </Main>
-            <Customization />
         </Box>
     );
 };

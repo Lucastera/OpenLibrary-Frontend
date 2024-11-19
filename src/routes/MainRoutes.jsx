@@ -4,8 +4,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'component/Loadable';
 
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('pages/SamplePage')));
+// routing
 const CodeReview = Loadable(lazy(() => import('pages/CodeReview')));
 const CodeExplanation = Loadable(lazy(() => import('pages/CodeExplanation')));
 const ViewReviewHistory = Loadable(lazy(() => import('pages/CodeReviewHistory')));
@@ -22,11 +21,7 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <SamplePage />
-        },
-        {
-            path: '/sample-page',
-            element: <SamplePage />
+            element: <CodeReview />
         },
         {
             path: '/code-review',
@@ -41,8 +36,8 @@ const MainRoutes = {
             element: <CodeCompletion />
         },
         {
-            path: '/code-refactoring',
-            element: <SamplePage />
+            path: '/code-translation',
+            element: <CodeTranslation />
         },
         {
             path: '/review/history',
@@ -51,10 +46,6 @@ const MainRoutes = {
         {
             path: '/review/detail/:historyID',
             element: <ViewDetailHistory />
-        },
-        {
-            path: '/code-translation',
-            element: <CodeTranslation />
         }
     ]
 };

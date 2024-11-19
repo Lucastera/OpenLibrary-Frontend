@@ -92,24 +92,7 @@ const Customization = () => {
         <>
             {/* toggle button */}
             <Tooltip title="Live Customize">
-                <Fab
-                    component="div"
-                    onClick={handleToggle}
-                    size="medium"
-                    variant="circular"
-                    color="secondary"
-                    sx={{
-                        borderRadius: 0,
-                        borderTopLeftRadius: '50%',
-                        borderBottomLeftRadius: '50%',
-                        borderTopRightRadius: '50%',
-                        borderBottomRightRadius: '4px',
-                        top: '25%',
-                        position: 'fixed',
-                        right: 10,
-                        zIndex: theme.zIndex.speedDial
-                    }}
-                >
+                <Fab component="div" onClick={handleToggle} size="medium" variant="circular" color="secondary">
                     <AnimateButton type="rotate">
                         <IconButton color="inherit" size="large" disableRipple>
                             <IconSettings />

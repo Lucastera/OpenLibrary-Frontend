@@ -8,7 +8,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 
 // project imports
 import LogoSection from '../LogoSection';
-import ProfileSection from './ProfileSection';
+import Customization from '../../Customization';
 
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
@@ -55,7 +55,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
-            <ProfileSection />
+            {/* <ProfileSection /> */}
+            <Customization />
         </>
     );
 };
