@@ -1,8 +1,8 @@
 // assets
-import { IconBrandChrome, IconEye, IconFileCode, IconCode } from '@tabler/icons-react';
+import { IconBrandChrome, IconEye, IconFileCode, IconCode, IconCodeMinus } from '@tabler/icons-react';
 
 // constant
-const icons = { IconBrandChrome, IconEye, IconFileCode, IconCode };
+const icons = { IconBrandChrome, IconEye, IconFileCode, IconCode, IconCodeMinus };
 
 const Menu = [
     {
@@ -13,7 +13,7 @@ const Menu = [
                 id: 'code-review',
                 title: 'Code Review',
                 type: 'item',
-                url: '/code-review',  // Updated URL
+                url: '/code-review',
                 icon: icons.IconEye,
                 breadcrumbs: false
             },
@@ -21,7 +21,7 @@ const Menu = [
                 id: 'code-explanation',
                 title: 'Code Explanation',
                 type: 'item',
-                url: '/code-explanation',  // Updated URL
+                url: '/code-explanation',
                 icon: icons.IconFileCode,
                 breadcrumbs: false
             },
@@ -29,7 +29,7 @@ const Menu = [
                 id: 'code-completion',
                 title: 'Code Completion',
                 type: 'item',
-                url: '/code-completion',  // Updated URL
+                url: '/code-completion',
                 icon: icons.IconCode,
                 breadcrumbs: false
             },
@@ -37,8 +37,8 @@ const Menu = [
                 id: 'code-translation',
                 title: 'Code Translation',
                 type: 'item',
-                url: '/code-translation',  // Updated URL
-                icon: icons.IconCode,
+                url: '/code-translation',
+                icon: icons.IconCodeMinus,
                 breadcrumbs: false
             }
         ]
