@@ -10,14 +10,6 @@ const Menu = [
         type: 'group',
         children: [
             {
-                id: 'sample-page',
-                title: 'Sample Page',
-                type: 'item',
-                url: '/sample-page',  // 保留的路径
-                icon: icons.IconBrandChrome,
-                breadcrumbs: false
-            },
-            {
                 id: 'code-review',
                 title: 'Code Review',
                 type: 'item',
@@ -38,14 +30,6 @@ const Menu = [
                 title: 'Code Completion',
                 type: 'item',
                 url: '/code-completion',  // Updated URL
-                icon: icons.IconCode,
-                breadcrumbs: false
-            },
-            {
-                id: 'code-refactoring',
-                title: 'Code Refactoring',
-                type: 'item',
-                url: '/code-refactoring',  // Updated URL
                 icon: icons.IconCode,
                 breadcrumbs: false
             },
