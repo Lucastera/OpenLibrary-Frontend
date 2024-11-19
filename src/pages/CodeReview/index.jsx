@@ -62,24 +62,18 @@ const CodeReview = () => {
     setAppliedSuggestions([]);
 
     try {
-      // const response = await fetch('/api/analyze-code', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({ code })
-      // });
       console.log(code)
-      const response = await submitCodeReview({
+      const data = await submitCodeReview({
         fullCode: code
       });
       // console.log(response);
 
-        const data = await response.json();
+        // const data = await response.json();
         setReport(`Report generated for the provided code: ${code.substring(0, 100)}...`);
-        setSuggestions(data.suggestions || []);
+        // setSuggestions(data.suggestions || []);
+        setSuggestions(data.issues || []);
 
-        setReport('Error: Unable to process code. Please try again later.');
+        // setReport('Error: Unable to process code. Please try again later.');
       
     } catch (error) {
       console.log(error)
@@ -91,25 +85,24 @@ const CodeReview = () => {
 
   const applyChange = (index) => {
     const suggestion = suggestions[index];
-    const modifiedCode = code.replace(suggestion.change.original, suggestion.change.modified);
-
+    const modifiedCode = code.replace(suggestion.originalCode, suggestion.fixedCode);
+  
     setAppliedSuggestions([...appliedSuggestions, { ...suggestion, index }]);
     setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: true } : s)));
     setCode(modifiedCode);
   };
-
+  
   const rollbackChange = (index) => {
-    // Find the suggestion by its index in appliedSuggestions
     const suggestion = appliedSuggestions.find((s) => s.index === index);
     if (!suggestion) return;
-
-    const rolledBackCode = code.replace(suggestion.change.modified, suggestion.change.original);
-
+  
+    const rolledBackCode = code.replace(suggestion.fixedCode, suggestion.originalCode);
+  
     setAppliedSuggestions(appliedSuggestions.filter((s) => s.index !== index));
     setSuggestions(suggestions.map((s, i) => (i === index ? { ...s, applied: false } : s)));
     setCode(rolledBackCode);
   };
-
+  
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={2}>
@@ -122,7 +115,8 @@ const CodeReview = () => {
               <input
                 type="file"
                 hidden
-                accept=".py,.txt" // Accept Python and text files
+                // accept=".py,.txt" // Accept Python and text files
+                accept=".py,.js,.rb,.txt,.java,.cpp,.c,.php,.go,.html,.css,.json,.md,.cs"
                 onChange={handleFileUpload}
               />
             </Button>
@@ -146,13 +140,13 @@ const CodeReview = () => {
                 {suggestions.map((suggestion, index) => (
                   <Paper key={index} sx={{ p: 2, mt: 2, backgroundColor: suggestion.applied ? '#d1e7dd' : '#f5f5f5' }}>
                     <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                      {suggestion.reason}
+                      {suggestion.issueReason}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Original:</strong> {suggestion.change.original}
+                      <strong>Original:</strong> {suggestion.originalCode}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Modified:</strong> {suggestion.change.modified}
+                      <strong>Modified:</strong> {suggestion.fixedCode}
                     </Typography>
                     {suggestion.applied ? (
                       <Button variant="outlined" color="secondary" onClick={() => rollbackChange(index)} sx={{ mt: 1 }}>

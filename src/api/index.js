@@ -12,7 +12,6 @@ export const submitCodeReview = (data) => {
     return request({
         url: '/review/submit',
         method: 'post',
-        params,
         data
     });
 };
