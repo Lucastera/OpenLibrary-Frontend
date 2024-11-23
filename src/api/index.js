@@ -23,3 +23,12 @@ export const getReviewDetailHistory = (historyID) => {
     });
   };
 
+export const getCodeTranslation = (data) => {
+    return request({
+        url: '/translation/gettranslation',
+        method: 'post',
+        data
+    });
+};
+
+export default getCodeTranslation;
