@@ -7,6 +7,7 @@ import MainCard from 'component/cards/MainCard';
 // ==============================|| SAMPLE PAGE ||============================== //
 import React, { useState } from 'react';
 import './CodeTranslation.css';
+import getCodeTranslation from 'api';
 
 const CodeTranslation = () => {
     // 状态管理
@@ -16,8 +17,13 @@ const CodeTranslation = () => {
     const [outputCode, setOutputCode] = useState('');
 
     // 模拟翻译功能
-    const handleTranslate = () => {
+    const handleTranslate = async () => {
         // 模拟翻译逻辑
+        const res = await getCodeTranslation({
+            'code': inputCode,
+            'codeorigin': inputLanguage,
+            'codetarget': outputLanguage
+    })
         setOutputCode(`Translated ${inputLanguage} code to ${outputLanguage} code:\n${inputCode}`);
     };
 
