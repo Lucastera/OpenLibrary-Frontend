@@ -1,59 +1,55 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Box, Typography, TextField } from '@mui/material';
-
-// project imports
+import { Button, Box, Typography } from '@mui/material';
 import MainCard from 'component/cards/MainCard';
+import {
+  getCodeExplanationUpload,
+  getCodeExplanationHistory,
+  getCodeExplanationGenerate_explanation,
+  getCodeExplanationGenerate_report
+} from '../../api';
 
 const CodeExplanation = () => {
   const navigate = useNavigate();
   const [activeFeature, setActiveFeature] = useState('');
   const [annotatedCode, setAnnotatedCode] = useState('');
   const [codeReport, setCodeReport] = useState('');
-  const [file, setFile] = useState(null);
-  const [chatInput, setChatInput] = useState('');
-  const [chatHistory, setChatHistory] = useState([]);
-  const [showChat, setShowChat] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState(['file1.txt', 'file2.txt', 'file3.txt']);
+  const [file_lib, setFile] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState('');
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setFile(file);
+    const file_lib = event.target.files[0];
+    setFile(file_lib);
   };
 
   const handleUpload = (event) => {
     event.preventDefault();
-    if (file) {
+    if (file_lib) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const fileContent = e.target.result;
-        const fileName = file.name;
+        const file = e.target.result;
+        const FileName = file_lib.name;
+        const File_size = `${file.length}`;
+        const UserID = '2';
 
-        const string1 = fileName;
-        const string2 = fileContent;
-
-        // Send string1 and string2 to the backend
-        fetch('YOUR_SERVER_ENDPOINT', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fileName: string1, fileContent: string2 }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log('Success:', data);
+        getCodeExplanationUpload({ 
+          file: file,
+          Filename: FileName, 
+          File_size: File_size, 
+          UserID: UserID })
+          .then((response) => {
+            console.log('Upload Success:', response);
+            setUploadedFiles([...uploadedFiles, FileName]);
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.error('Upload Error:', error);
           });
 
-        setUploadedFiles([...uploadedFiles, fileName]);
+        setFile(null);
       };
 
-      reader.readAsText(file);
-      setFile(null);
+      reader.readAsText(file_lib);
     }
   };
 
@@ -61,43 +57,60 @@ const CodeExplanation = () => {
     setActiveFeature('uploadNewFile');
     setAnnotatedCode('');
     setCodeReport('');
-    setShowChat(false);
   };
 
   const handleViewUploadedFile = () => {
     setActiveFeature('viewUploadedFile');
-    setAnnotatedCode('');
-    setCodeReport('');
-    setShowChat(false);
+    const UserID = '2';
+    getCodeExplanationHistory({ id: UserID })
+      .then((response) => {
+        // console.log('History:', response);
+        // Extract file names from the response
+        const fileNames = response.files_list.map(file => ({
+          name: file.name,
+          uploadTime: file.upload_time
+        }));
+        // Update uploadedFiles state
+        setUploadedFiles(fileNames);
+      })
+      .catch((error) => {
+        console.error('History Error:', error);
+      });
   };
 
   const handleGenerateAnnotations = () => {
-    setActiveFeature('generateAnnotations');
-    setAnnotatedCode('// Annotated code example\nfunction example() {}');
-    setCodeReport('');
-    setShowChat(false);
+    if (selectedFile) {
+      getCodeExplanationGenerate_explanation({ Filename: selectedFile })
+        .then((response) => {
+          // console.log('Explanation:', response);
+          setAnnotatedCode(response); // Update with actual response data
+          setActiveFeature('generateAnnotations');
+        })
+        .catch((error) => {
+          console.error('Explanation Error:', error);
+          // setAnnotatedCode('Error generating annotations');
+        });
+    }
   };
 
   const handleGenerateCodeReport = () => {
-    setActiveFeature('generateCodeReport');
-    setAnnotatedCode('');
-    setCodeReport('Line 1: Function declaration\nLine 2: Empty function body');
-    setShowChat(true);
-  };
-
-  const handleSelectFile = (fileName) => {
-    setSelectedFile(fileName);
-    setActiveFeature('generateAnnotations');
-    setAnnotatedCode(`// Annotated code for ${fileName}\nfunction example() {}`);
-    setCodeReport('');
-  };
-
-  const handleChatSubmit = () => {
-    if (chatInput.trim()) {
-      setChatHistory([...chatHistory, { role: 'user', message: chatInput }]);
-      setChatHistory((prev) => [...prev, { role: 'system', message: 'Response from system.' }]);
-      setChatInput('');
+    if (selectedFile) {
+      getCodeExplanationGenerate_report({ Filename: selectedFile })
+        .then((response) => {
+          // console.log('Report:', response);
+          setCodeReport(response); // Update with actual response data
+          setActiveFeature('generateCodeReport');
+        })
+        .catch((error) => {
+          console.error('Report Error:', error);
+          // setCodeReport('Error generating report');
+        });
     }
+  };
+
+  const handleSelectFile = (FileName) => {
+    setSelectedFile(FileName);
+    setActiveFeature('generateAnnotations');
   };
 
   return (
@@ -132,7 +145,7 @@ const CodeExplanation = () => {
               </Button>
             </label>
             <Typography variant="body2" display="inline" ml={2}>
-              {file ? file.name : 'No file selected'}
+              {file_lib ? file_lib.name : 'No file selected'}
             </Typography>
             <Button type="submit" variant="contained" color="primary" style={{ marginLeft: '16px' }}>
               Upload
@@ -141,15 +154,16 @@ const CodeExplanation = () => {
         </Box>
       )}
 
+
       {activeFeature === 'viewUploadedFile' && (
         <Box mt={2}>
           <Typography variant="h6">Uploaded Files</Typography>
-          {uploadedFiles.map((fileName, index) => (
+          {uploadedFiles.map((file, index) => (
             <Box key={index} display="flex" alignItems="center" mt={1}>
               <Typography variant="body2" style={{ flexGrow: 1 }}>
-                {fileName}
+                {file.name} [ {file.uploadTime}]
               </Typography>
-              <Button variant="outlined" onClick={() => handleSelectFile(fileName)}>
+              <Button variant="outlined" onClick={() => handleSelectFile(file.name)}>
                 Select This File
               </Button>
             </Box>
@@ -160,40 +174,14 @@ const CodeExplanation = () => {
       {activeFeature === 'generateAnnotations' && selectedFile && (
         <Box mt={2}>
           <Typography variant="h6">Commented Code for {selectedFile}</Typography>
-          <pre>{annotatedCode}</pre>
+          <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{annotatedCode}</pre>
         </Box>
       )}
 
-      {activeFeature === 'generateCodeReport' && (
+      {activeFeature === 'generateCodeReport' && selectedFile &&(
         <Box mt={2}>
           <Typography variant="h6">Code Explanation Report</Typography>
-          <pre>{codeReport}</pre>
-        </Box>
-      )}
-
-      {showChat && (
-        <Box mt={4}>
-          <Typography variant="h6">Chat with System</Typography>
-          <Box mt={2}>
-            {chatHistory.map((chat, index) => (
-              <Typography key={index} color={chat.role === 'user' ? 'primary' : 'textSecondary'}>
-                {chat.role === 'user' ? 'You: ' : 'System: '}
-                {chat.message}
-              </Typography>
-            ))}
-          </Box>
-          <Box display="flex" mt={2} gap={1}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Type your message"
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-            />
-            <Button variant="contained" color="primary" onClick={handleChatSubmit}>
-              Send
-            </Button>
-          </Box>
+          <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{codeReport}</pre>
         </Box>
       )}
     </MainCard>

@@ -23,3 +23,36 @@ export const getReviewDetailHistory = (historyID) => {
     });
   };
 
+export const getCodeExplanationUpload = (params) => {
+    return request({
+        url: '/file_blueprint/uploadfile',
+        method: 'get',
+        params
+    });
+};
+
+
+export const getCodeExplanationHistory = (params) => {
+    return request({
+        url: '/user-token/history_files',
+        method: 'get',
+        params
+    });
+};
+
+export const getCodeExplanationGenerate_explanation = (params) => {
+    return request({
+        url: '/file-explain/getFileExplain',
+        method: 'get',
+        params
+    });
+};
+
+export const getCodeExplanationGenerate_report= (params) => {
+    return request({
+        url: '/file-explain/getFileReport',
+        method: 'get',
+        params
+    });
+};
+
