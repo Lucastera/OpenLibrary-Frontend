@@ -31,7 +31,7 @@ const CodeCompletion = () => {
 
     try {
       // Call the API using Axios
-      const response = await axios.post('/completion/completion', {
+      const response = await axios.post('/completion/complete', {
         inputCode // Send the inputCode as the request body
       });
 
