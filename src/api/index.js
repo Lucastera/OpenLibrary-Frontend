@@ -61,5 +61,11 @@ export const getCodeTranslation = (data) => {
         data
     });
 };
-
+export const completion = (data) => {
+    return request({
+        url: '/completion/complete',
+        method: 'post',
+        data
+    });
+};
 export default getCodeTranslation;
