@@ -32,6 +32,7 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@tabler/icons-react": "^2.47.0",
     "@uiw/react-codemirror": "^4.23.6",
+    "@vercel/analytics": "^1.4.1",
     "@vitejs/plugin-react": "^4.2.1",
     "apexcharts": "^3.46.2",
     "axios": "^1.7.7",
