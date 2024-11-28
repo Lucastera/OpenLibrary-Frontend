@@ -1,5 +1,4 @@
 import request from './request';
-import axios from 'axios';
 export const getCodeReviewHistory = (params) => {
     return request({
         url: '/review/history',
@@ -18,18 +17,17 @@ export const submitCodeReview = (data) => {
 
 export const getReviewDetailHistory = (historyID) => {
     return request({
-      url: `/review/detail?history_id=${historyID}`, // Passing reviewId as a query parameter
-      method: 'get'
+        url: `/review/detail?history_id=${historyID}`, // Passing reviewId as a query parameter
+        method: 'get'
     });
-  };
-  export const getCodeExplanationUpload = (params) => {
+};
+export const getCodeExplanationUpload = (params) => {
     return request({
         url: '/file_blueprint/uploadfile',
         method: 'get',
         params
     });
 };
-
 
 export const getCodeExplanationHistory = (params) => {
     return request({
@@ -47,7 +45,7 @@ export const getCodeExplanationGenerate_explanation = (params) => {
     });
 };
 
-export const getCodeExplanationGenerate_report= (params) => {
+export const getCodeExplanationGenerate_report = (params) => {
     return request({
         url: '/file-explain/getFileReport',
         method: 'get',
@@ -59,22 +57,14 @@ export const getCodeTranslation = (data) => {
     return request({
         url: '/translation/getTranslation',
         method: 'post',
-        data,
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        data
     });
 };
 
-
 export const CodeCompletion = (data) => {
-    return request({
-        url: '/completion/complete',
-        method: 'post',
-        data
-    });
+    return request({
+        url: '/completion/complete',
+        method: 'post',
+        data
+    });
 };
-
-
-
-export default getCodeTranslation;

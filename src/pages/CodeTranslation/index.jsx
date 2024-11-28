@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import './CodeTranslation.css';
-import axios from 'axios';
-import getCodeTranslation from 'api';
+import './CodeTranslation.scss';
+import { getCodeTranslation } from '../../api/index';
 const CodeTranslation = () => {
-    // ×´Ì¬¹ÜÀí
+    // ×´Ì¬ï¿½ï¿½ï¿½ï¿½
     const [inputLanguage, setInputLanguage] = useState('C++');
     const [outputLanguage, setOutputLanguage] = useState('Java');
     const [inputCode, setInputCode] = useState('');
@@ -11,16 +10,16 @@ const CodeTranslation = () => {
 
     const handleTranslate = async () => {
         try {
-            // µ÷ÓÃ·­Òë API
+            // ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ API
             const res = await getCodeTranslation({
-                'code': inputCode,
-                'codeorigin': inputLanguage,
-                'codetarget': outputLanguage
+                code: inputCode,
+                codeorigin: inputLanguage,
+                codetarget: outputLanguage
             });
 
-            // ¼ì²éÏìÓ¦Êý¾ÝÊÇ·ñÓÐ·­Òë½á¹û
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½
             if (res && res.translation) {
-                // ÉèÖÃ·­Òë½á¹ûµ½ outputCode
+                // ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ outputCode
                 setOutputCode(res.translation);
             } else {
                 setOutputCode('Translation failed: No translation data returned.');
@@ -30,7 +29,7 @@ const CodeTranslation = () => {
             setOutputCode('Unexpected error occurred. Please try again.');
         }
     };
-    // ¸´ÖÆ´úÂë¹¦ÄÜ
+    // ï¿½ï¿½ï¿½Æ´ï¿½ï¿½ë¹¦ï¿½ï¿½
     const handleCopy = () => {
         navigator.clipboard.writeText(outputCode);
         alert('Code copied to clipboard!');
@@ -41,33 +40,25 @@ const CodeTranslation = () => {
             <h1>Code Translator</h1>
 
             <div className="translator-controls">
-                {/* ×ó²àÓïÑÔÑ¡Ôñ¿ò */}
+                {/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ */}
                 <div className="select-box">
                     <label htmlFor="input-language">INPUT LANGUAGE</label>
-                    <select
-                        id="input-language"
-                        value={inputLanguage}
-                        onChange={(e) => setInputLanguage(e.target.value)}
-                    >
+                    <select id="input-language" value={inputLanguage} onChange={(e) => setInputLanguage(e.target.value)}>
                         <option value="C++">C++</option>
                         <option value="Python">Python</option>
                         <option value="Java">Java</option>
                     </select>
                 </div>
 
-                {/* ·­Òë°´Å¥ */}
+                {/* ï¿½ï¿½ï¿½ë°´Å¥ */}
                 <button className="translate-button" onClick={handleTranslate}>
                     Translate
                 </button>
 
-                {/* ÓÒ²àÓïÑÔÑ¡Ôñ¿ò */}
+                {/* ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ */}
                 <div className="select-box">
                     <label htmlFor="output-language">OUTPUT LANGUAGE</label>
-                    <select
-                        id="output-language"
-                        value={outputLanguage}
-                        onChange={(e) => setOutputLanguage(e.target.value)}
-                    >
+                    <select id="output-language" value={outputLanguage} onChange={(e) => setOutputLanguage(e.target.value)}>
                         <option value="C++">C++</option>
                         <option value="Python">Python</option>
                         <option value="Java">Java</option>
@@ -76,7 +67,7 @@ const CodeTranslation = () => {
             </div>
 
             <div className="code-editors">
-                {/* ÊäÈë´úÂëÇøÓò */}
+                {/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */}
                 <div className="editor-container">
                     <textarea
                         className="code-editor"
@@ -86,16 +77,11 @@ const CodeTranslation = () => {
                     />
                 </div>
 
-                {/* Êä³ö´úÂëÇøÓò */}
+                {/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */}
                 <div className="editor-container">
-                    <textarea
-                        className="code-editor"
-                        value={outputCode}
-                        readOnly
-                        placeholder="Translated code will appear here..."
-                    />
+                    <textarea className="code-editor" value={outputCode} readOnly placeholder="Translated code will appear here..." />
 
-                    {/* ¸´ÖÆ°´Å¥ */}
+                    {/* ï¿½ï¿½ï¿½Æ°ï¿½Å¥ */}
                     <button className="copy-button" onClick={handleCopy}>
                         Copy
                     </button>
