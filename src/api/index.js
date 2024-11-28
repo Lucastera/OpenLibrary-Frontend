@@ -1,5 +1,5 @@
 import request from './request';
-
+import axios from 'axios';
 export const getCodeReviewHistory = (params) => {
     return request({
         url: '/review/history',
@@ -54,12 +54,18 @@ export const getCodeExplanationGenerate_report= (params) => {
         params
     });
 };
-export const getCodeTranslation = (data) => {
-    return request({
-        url: '/translation/gettranslation',
-        method: 'post',
-        data
-    });
+const getCodeTranslation = async (data) => {
+    try {
+        const response = await axios.post('http://120.25.76.18/api_1_0/translation/getTranslation', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data; // 返回响应数据
+    } catch (error) {
+        console.error('API Error:', error);
+        throw new Error('Translation API failed.');
+    }
 };
 export const CodeCompletion = (data) => {
     return request({
@@ -68,4 +74,5 @@ export const CodeCompletion = (data) => {
         data
     });
 };
+
 export default getCodeTranslation;

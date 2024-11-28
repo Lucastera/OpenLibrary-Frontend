@@ -1,12 +1,6 @@
-// material-ui
-import Typography from '@mui/material/Typography';
-
-// project imports
-import MainCard from 'component/cards/MainCard';
-
-// ==============================|| SAMPLE PAGE ||============================== //
 import React, { useState } from 'react';
 import './CodeTranslation.css';
+import axios from 'axios';
 import getCodeTranslation from 'api';
 
 const CodeTranslation = () => {
@@ -16,17 +10,27 @@ const CodeTranslation = () => {
     const [inputCode, setInputCode] = useState('');
     const [outputCode, setOutputCode] = useState('');
 
-    // 模拟翻译功能
     const handleTranslate = async () => {
-        // 模拟翻译逻辑
-        const res = await getCodeTranslation({
-            'code': inputCode,
-            'codeorigin': inputLanguage,
-            'codetarget': outputLanguage
-    })
-        setOutputCode(`Translated ${inputLanguage} code to ${outputLanguage} code:\n${inputCode}`);
-    };
+        try {
+            // 调用翻译 API
+            const res = await getCodeTranslation({
+                'code': inputCode,
+                'codeorigin': inputLanguage,
+                'codetarget': outputLanguage
+            });
 
+            // 检查响应数据是否有翻译结果
+            if (res && res.translation) {
+                // 设置翻译结果到 outputCode
+                setOutputCode(res.translation);
+            } else {
+                setOutputCode('Translation failed: No translation data returned.');
+            }
+        } catch (error) {
+            console.error('Error during translation:', error);
+            setOutputCode('Unexpected error occurred. Please try again.');
+        }
+    };
     // 复制代码功能
     const handleCopy = () => {
         navigator.clipboard.writeText(outputCode);
