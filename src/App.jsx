@@ -13,7 +13,7 @@ import themes from 'themes';
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
 
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from '@vercel/analytics/react';
 
 // ==============================|| APP ||============================== //
 

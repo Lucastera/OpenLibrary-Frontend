@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './CodeTranslation.scss';
 import { getCodeTranslation } from '../../api/index';
+
 const CodeTranslation = () => {
-    // ״̬����
+    // State variables
     const [inputLanguage, setInputLanguage] = useState('C++');
     const [outputLanguage, setOutputLanguage] = useState('Java');
     const [inputCode, setInputCode] = useState('');
@@ -10,16 +11,16 @@ const CodeTranslation = () => {
 
     const handleTranslate = async () => {
         try {
-            // ���÷��� API
+            // Call translation API
             const res = await getCodeTranslation({
                 code: inputCode,
                 codeorigin: inputLanguage,
                 codetarget: outputLanguage
             });
 
-            // �����Ӧ�����Ƿ��з�����
+            // Check if response has translation data
             if (res && res.translation) {
-                // ���÷������� outputCode
+                // Set translated code to outputCode
                 setOutputCode(res.translation);
             } else {
                 setOutputCode('Translation failed: No translation data returned.');
@@ -29,7 +30,8 @@ const CodeTranslation = () => {
             setOutputCode('Unexpected error occurred. Please try again.');
         }
     };
-    // ���ƴ��빦��
+
+    // Copy code function
     const handleCopy = () => {
         navigator.clipboard.writeText(outputCode);
         alert('Code copied to clipboard!');
@@ -40,7 +42,7 @@ const CodeTranslation = () => {
             <h1>Code Translator</h1>
 
             <div className="translator-controls">
-                {/* �������ѡ��� */}
+                {/* Input language selection */}
                 <div className="select-box">
                     <label htmlFor="input-language">INPUT LANGUAGE</label>
                     <select id="input-language" value={inputLanguage} onChange={(e) => setInputLanguage(e.target.value)}>
@@ -50,12 +52,12 @@ const CodeTranslation = () => {
                     </select>
                 </div>
 
-                {/* ���밴ť */}
+                {/* Translate button */}
                 <button className="translate-button" onClick={handleTranslate}>
                     Translate
                 </button>
 
-                {/* �Ҳ�����ѡ��� */}
+                {/* Output language selection */}
                 <div className="select-box">
                     <label htmlFor="output-language">OUTPUT LANGUAGE</label>
                     <select id="output-language" value={outputLanguage} onChange={(e) => setOutputLanguage(e.target.value)}>
@@ -67,7 +69,7 @@ const CodeTranslation = () => {
             </div>
 
             <div className="code-editors">
-                {/* ����������� */}
+                {/* Input code editor */}
                 <div className="editor-container">
                     <textarea
                         className="code-editor"
@@ -77,11 +79,11 @@ const CodeTranslation = () => {
                     />
                 </div>
 
-                {/* ����������� */}
+                {/* Output code editor */}
                 <div className="editor-container">
                     <textarea className="code-editor" value={outputCode} readOnly placeholder="Translated code will appear here..." />
 
-                    {/* ���ư�ť */}
+                    {/* Copy button */}
                     <button className="copy-button" onClick={handleCopy}>
                         Copy
                     </button>
