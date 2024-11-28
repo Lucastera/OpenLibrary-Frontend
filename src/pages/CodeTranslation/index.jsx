@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import './CodeTranslation.css';
 import axios from 'axios';
 import getCodeTranslation from 'api';
-
-
-
 const CodeTranslation = () => {
     // ЧґМ¬№ЬАн
     const [inputLanguage, setInputLanguage] = useState('C++');
