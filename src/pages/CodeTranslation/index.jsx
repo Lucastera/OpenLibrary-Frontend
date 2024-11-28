@@ -8,8 +8,10 @@ const CodeTranslation = () => {
     const [outputLanguage, setOutputLanguage] = useState('Java');
     const [inputCode, setInputCode] = useState('');
     const [outputCode, setOutputCode] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleTranslate = async () => {
+        setLoading(true);
         try {
             // Call translation API
             const res = await getCodeTranslation({
@@ -28,6 +30,8 @@ const CodeTranslation = () => {
         } catch (error) {
             console.error('Error during translation:', error);
             setOutputCode('Unexpected error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -45,7 +49,7 @@ const CodeTranslation = () => {
                 {/* Input language selection */}
                 <div className="select-box">
                     <label htmlFor="input-language">INPUT LANGUAGE</label>
-                    <select id="input-language" value={inputLanguage} onChange={(e) => setInputLanguage(e.target.value)}>
+                    <select id="input-language" value={inputLanguage} onChange={(e) => setInputLanguage(e.target.value)} disabled={loading}>
                         <option value="C++">C++</option>
                         <option value="Python">Python</option>
                         <option value="Java">Java</option>
@@ -53,14 +57,19 @@ const CodeTranslation = () => {
                 </div>
 
                 {/* Translate button */}
-                <button className="translate-button" onClick={handleTranslate}>
-                    Translate
+                <button className="translate-button" onClick={handleTranslate} disabled={loading}>
+                    {loading ? 'Translating...' : 'Translate'}
                 </button>
 
                 {/* Output language selection */}
                 <div className="select-box">
                     <label htmlFor="output-language">OUTPUT LANGUAGE</label>
-                    <select id="output-language" value={outputLanguage} onChange={(e) => setOutputLanguage(e.target.value)}>
+                    <select
+                        id="output-language"
+                        value={outputLanguage}
+                        onChange={(e) => setOutputLanguage(e.target.value)}
+                        disabled={loading}
+                    >
                         <option value="C++">C++</option>
                         <option value="Python">Python</option>
                         <option value="Java">Java</option>
@@ -76,6 +85,7 @@ const CodeTranslation = () => {
                         value={inputCode}
                         onChange={(e) => setInputCode(e.target.value)}
                         placeholder="Type your code here..."
+                        disabled={loading}
                     />
                 </div>
 
@@ -84,7 +94,7 @@ const CodeTranslation = () => {
                     <textarea className="code-editor" value={outputCode} readOnly placeholder="Translated code will appear here..." />
 
                     {/* Copy button */}
-                    <button className="copy-button" onClick={handleCopy}>
+                    <button className="copy-button" onClick={handleCopy} disabled={loading}>
                         Copy
                     </button>
                 </div>
