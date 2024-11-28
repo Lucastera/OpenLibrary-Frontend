@@ -27,7 +27,7 @@ request.interceptors.response.use(
     (res) => {
         let data = res.data;
         // Handle your business logic here, e.g., check if token is expired
-        if (data?.code && data.code !== '2000') {
+        if (data?.code && data?.code !== '2000') {
             // Handle the error based on the code
             const errorMessage = data?.message || 'Unexpected error occurred';
             return Promise.reject(new Error(errorMessage));
