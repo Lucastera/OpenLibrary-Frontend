@@ -66,6 +66,7 @@ export const getCodeTranslation = (data) => {
     });
 };
 
+
 export const CodeCompletion = (data) => {
     return request({
         url: '/completion/complete',
